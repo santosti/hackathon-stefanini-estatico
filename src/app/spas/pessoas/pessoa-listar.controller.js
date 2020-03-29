@@ -12,10 +12,18 @@ function PessoaListarController($rootScope, $scope, $location,
 
     vm.url = "http://localhost:8080/treinamento/api/pessoas/";
     vm.urlEndereco = "http://localhost:8080/treinamento/api/enderecos/";
+    vm.urlCEP = "https://viacep.com.br/ws/70670422/json/";
+
 
     vm.init = function () {
+        HackatonStefaniniService.buscarCEP(vm.urlCEP).then( //exemplo cep
+            function(responseCEP){
+                console.log(responseCEP);
+            }
+        )
         HackatonStefaniniService.listar(vm.url).then(
             function (responsePessoas) {
+                console.log(responsePessoas);
                 if (responsePessoas.data !== undefined)
                     vm.listaPessoas = responsePessoas.data;
 
@@ -43,7 +51,7 @@ function PessoaListarController($rootScope, $scope, $location,
         );
     };
 
-    vm.atualizarPaginanacao = function (index) {
+    vm.atualizarPaginacao = function (index) {
 
         if (index >= vm.currentPage)
             vm.avancarPaginanacao(index);
@@ -52,7 +60,7 @@ function PessoaListarController($rootScope, $scope, $location,
     };
 
     vm.avancarPaginanacao = function (index) {
-        
+
         vm.listaPessoasMostrar = [];
         vm.currentPage++;
 
@@ -69,7 +77,7 @@ function PessoaListarController($rootScope, $scope, $location,
     };
 
     vm.retrocederPaginanacao = function (index) {
-        
+
         vm.listaPessoasMostrar = [];
 
         vm.currentPage--;
@@ -93,22 +101,35 @@ function PessoaListarController($rootScope, $scope, $location,
 
     vm.remover = function (id) {
 
-        var liberaExclusao = true;
+        var liberaExclusao;
+
+        if (typeof id.id !== 'undefined') {
+            liberaExclusao = true;
+            var acao = id.acao;
+            var id = id.id;
+        } else {
+            liberaExclusao = true;
+        }
 
         angular.forEach(vm.listaEndereco, function (value, key) {
             if (value.idPessoa === id)
                 liberaExclusao = false;
         });
 
+        var deferred = $q.defer();
         if (liberaExclusao)
             HackatonStefaniniService.excluir(vm.url + id).then(
                 function (response) {
-                    vm.init();
+                    deferred.resolve(response.data);
+                    if (typeof acao === 'undefined') {
+                        vm.init();
+                    }
                 }
             );
         else {
             alert("Pessoa com Endereço vinculado, exclusão não permitida");
         }
+        return deferred.promise;
     }
 
     vm.retornarTelaListagem = function () {

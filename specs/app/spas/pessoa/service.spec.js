@@ -3,6 +3,7 @@ describe('Conjunto de testes - Hudson', function(){
 
     beforeEach(angular.mock.module('hackaton-stefanini'));
 
+    // Injeta o filtro para a central de teste
     beforeEach(inject(function(HackatonStefaniniService){
         ServiceTeste = HackatonStefaniniService;
     }))
@@ -18,5 +19,4 @@ describe('Conjunto de testes - Hudson', function(){
     it('Testando o Excluir', function(){
         expect(ServiceTeste.excluir()).toBeDefined();
     })
-
 })

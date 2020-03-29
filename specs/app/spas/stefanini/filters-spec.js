@@ -1,12 +1,13 @@
 describe('Filtros', function() {
 
     // Carrega os filtros do arh
-    beforeEach(module('stefanini.filters'));
+    beforeEach(angular.mock.module('stefanini.filters'));
 
     var $filter;
 
     beforeEach(inject(function(_$filter_) {
         $filter = _$filter_;
+
     }));
 
     describe('Converter chave em uma matrícula', function() {

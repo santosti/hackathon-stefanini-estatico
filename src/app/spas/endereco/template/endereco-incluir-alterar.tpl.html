@@ -1,0 +1,46 @@
+<style>
+    .btn-space {
+        margin-right: 10px;
+    }
+
+    myModal {
+        z-index: 2147483647;
+    }
+
+    .disabledDiv {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+</style>
+
+<div>
+    <form>
+        <div class="mx-auto" style="width: 100px;">
+            <h5 class="modal-title">{{vm.tituloTela}}</h5>
+        </div>
+        <div class="form-group">
+            <label for="cepEndereco">CEP: </label>
+            <input type="text" class="form-control" id="cepEndereco" ng-model="vm.enderecoModal.cep" placeholder="Digite o CEP" />
+        </div>
+        <div class="form-group">
+            <label for="ufEndereco">UF: </label>
+            <input type="text" class="form-control" id="ufEndereco" ng-model="vm.enderecoModal.uf" placeholder="Digite o UF" />
+        </div>
+        <div class="form-group">
+            <label for="localidadeEndereco">Cidade: </label>
+            <input type="text" class="form-control" id="localidadeEndereco" ng-model="vm.enderecoModal.localidade" placeholder="Digite a cidade" />
+        </div>
+        <div class="form-group">
+            <label for="bairroEndereco">Bairro: </label>
+            <input type="text" class="form-control" id="bairroEndereco" ng-model="vm.enderecoModal.bairro" placeholder="Digite o bairro" />
+        </div>
+        <div class="form-group">
+            <label for="logradouroEndereco">Logradouro: </label>
+            <input type="text" class="form-control" id="logradouroEndereco" ng-model="vm.enderecoModal.logradouro" placeholder="Digite o logradouro" />
+        </div>
+        <div class="form-group">
+            <label for="complementoEndereco">Complemento: </label>
+            <input type="text" class="form-control" id="complementoEndereco" ng-model="vm.enderecoModal.complemento" placeholder="Digite o complemento" />
+        </div>
+    </form>
+</div>

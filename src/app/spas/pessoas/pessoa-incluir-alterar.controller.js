@@ -46,25 +46,26 @@ function PessoaIncluirAlterarController(
 
     /**METODOS DE INICIALIZACAO */
     vm.init = function () {
-
         vm.tituloTela = "Cadastrar Pessoa";
         vm.acao = "Cadastrar";
-        vm.idPessoa = $routeParams.idPessoa;
+
         /**Recuperar a lista de perfil */
         vm.listar(vm.urlPerfil).then(
             function (response) {
                 if (response !== undefined) {
                     vm.listaPerfil = response;
-                    if (vm.idPessoa) {
+                    if ($routeParams.idPessoa) {
                         vm.tituloTela = "Editar Pessoa";
                         vm.acao = "Editar";
-
-                        vm.recuperarObjetoPorIDURL(vm.idPessoa, vm.urlPessoa).then(
+                        vm.recuperarObjetoPorIDURL($routeParams.idPessoa, vm.urlPessoa).then(
                             function (pessoaRetorno) {
                                 if (pessoaRetorno !== undefined) {
                                     vm.pessoa = pessoaRetorno;
+                                    console.log(pessoaRetorno.dataNascimento);
                                     vm.pessoa.dataNascimento = vm.formataDataTela(pessoaRetorno.dataNascimento);
+                                    console.log(vm.pessoa.dataNascimento);
                                     vm.perfil = vm.pessoa.perfils[0];
+                                    vm.pessoa.perfils = [];
                                 }
                             }
                         );
@@ -84,7 +85,7 @@ function PessoaIncluirAlterarController(
     };
 
     vm.abrirModal = function (endereco) {
-
+        vm.tituloTela = "Cadastrar Endereço";
         vm.enderecoModal = vm.enderecoDefault;
         if (endereco !== undefined)
             vm.enderecoModal = endereco;
@@ -101,28 +102,31 @@ function PessoaIncluirAlterarController(
     };
 
     vm.incluir = function () {
-        vm.pessoa.dataNascimento = vm.formataDataJava(vm.pessoa.dataNascimento);
 
-        var objetoDados = angular.copy(vm.pessoa);
+        var objetoDados = angular.copy(vm.pessoa, vm.endereco);
+
+        objetoDados.dataNascimento = vm.formataDataJava(vm.pessoa.dataNascimento);
+        console.log(objetoDados.dataNascimento);
         var listaEndereco = [];
+
         angular.forEach(objetoDados.enderecos, function (value, key) {
             if (value.complemento.length > 0) {
                 value.idPessoa = objetoDados.id;
                 listaEndereco.push(angular.copy(value));
             }
         });
-
         objetoDados.enderecos = listaEndereco;
-        if (vm.perfil !== null){
 
-            vm.isNovoPerfil = true;
-            
+        if (vm.perfil !== null) {
+
+            var isNovoPerfil = true;
+
             angular.forEach(objetoDados.perfils, function (value, key) {
                 if (value.id === vm.perfil.id) {
-                    vm.isNovoPerfil = false;
+                    isNovoPerfil = false;
                 }
             });
-            if (vm.isNovoPerfil)
+            if (isNovoPerfil)
                 objetoDados.perfils.push(vm.perfil);
         }
         if (vm.acao == "Cadastrar") {
@@ -131,16 +135,16 @@ function PessoaIncluirAlterarController(
                 function (pessoaRetorno) {
                     vm.retornarTelaListagem();
                 });
+
         } else if (vm.acao == "Editar") {
             vm.alterar(vm.urlPessoa, objetoDados).then(
                 function (pessoaRetorno) {
-                    vm.retornarTelaListagem();
+                    //   vm.retornarTelaListagem();
                 });
         }
     };
 
     vm.remover = function (objeto, tipo) {
-
         var url = vm.urlPessoa + objeto.id;
         if (tipo === "ENDERECO")
             url = vm.urlEndereco + objeto.id;
@@ -153,7 +157,6 @@ function PessoaIncluirAlterarController(
 
     /**METODOS DE SERVICO */
     vm.recuperarObjetoPorIDURL = function (id, url) {
-
         var deferred = $q.defer();
         HackatonStefaniniService.listarId(url + id).then(
             function (response) {
@@ -180,7 +183,6 @@ function PessoaIncluirAlterarController(
     }
 
     vm.salvar = function (url, objeto) {
-
         var deferred = $q.defer();
         var obj = JSON.stringify(objeto);
         HackatonStefaniniService.incluir(url, obj).then(
@@ -223,8 +225,8 @@ function PessoaIncluirAlterarController(
     /**METODOS AUXILIARES */
     vm.formataDataJava = function (data) {
         var dia = data.slice(0, 2);
-        var mes = data.slice(2, 4);
-        var ano = data.slice(4, 8);
+        var mes = data.slice(2, 4);//3, 5
+        var ano = data.slice(4, 8);//4, 8
 
         return ano + "-" + mes + "-" + dia;
     };

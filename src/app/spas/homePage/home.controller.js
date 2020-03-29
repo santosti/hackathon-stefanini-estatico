@@ -1,4 +1,5 @@
 angular.module("hackaton-stefanini").controller("HomeController", HomeController);
+
 HomeController.$inject = ["$rootScope", "$scope", "$location",
     "$q", '$filter', '$routeParams', 'HackatonStefaniniService'];
 
