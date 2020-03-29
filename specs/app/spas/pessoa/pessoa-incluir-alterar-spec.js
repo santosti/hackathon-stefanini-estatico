@@ -108,20 +108,7 @@ describe('PessoaIncluirAlterarController', function () {
     });
 
     ////////////////////////////MÉTODO INCLUIR///////////////////////////////////////
-    /*  describe('Método incluir Pessoa', function(){
-          var objPessoa = pessoa;
-          var acao = Cadastrar;
-  
-          it('Deve cadastrar uma pessoa', function(){
-              var retorno = $controller.incluir();
-          });
-  
-          it('Deve retornar a tela de listagem de pessoas', function () {
-              var retornoIncluir = $controller.incluir();
-  
-              expect($location.url(retornoIncluir)).toEqual('/listarPessoas');
-          });
-      }); */
+    
 
     ////////////////////////////MÉTODO-LISTAR///////////////////////////////////////
     describe('Método listar objetos', function () {
@@ -231,22 +218,22 @@ describe('PessoaIncluirAlterarController', function () {
     });
 
     ////////////////////////////FORMATA-DATA///////////////////////////////////////
-       describe('Verifica o formato da data', function () {
-   
-           it('Deve retornar Formata Data Tela', function () {
-               var data = "1995-08-25";
-               var dataTela = $controller.formataDataTela(data);
-               
-               expect(dataTela).toBe('25081995');
-           });
-           
-           it('Deve retornar Formata Data Java', function () {
-               var data = "25-08-1995";
-               var dataJava = $controller.formataDataJava(data);
-             
-               expect(dataJava).toBe('8-19--0-25'); 
-           });
-       });
+    describe('Verifica o formato da data', function () {
+
+        it('Deve retornar Formata Data Tela', function () {
+            var data = "1995-08-25";
+            var dataTela = $controller.formataDataTela(data);
+
+            expect(dataTela).toBe('25081995');
+        });
+
+        it('Deve retornar Formata Data Java', function () {
+            var data = "25-08-1995";
+            var dataJava = $controller.formataDataJava(data);
+
+            expect(dataJava).toBe('8-19--0-25');
+        });
+    });
 });
 
 
