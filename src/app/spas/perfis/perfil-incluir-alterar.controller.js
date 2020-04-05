@@ -24,6 +24,8 @@ function PerfilIncluirAlterarController(
         id: null,
         nome: "",
         descricao: "",
+        dataHoraInclusao: "",
+        dataHoraAlteracao: ""
     };
 
     vm.urlPerfil = "http://localhost:8080/treinamento/api/perfils/";
@@ -67,7 +69,8 @@ function PerfilIncluirAlterarController(
     vm.incluir = function () {
         var objetoDados = angular.copy(vm.perfil);
         console.log(objetoDados);
-
+        objetoDados.dataHoraInclusao = null;
+        objetoDados.dataHoraAlteracao = null;
         if (vm.acao == "Cadastrar") {
             HackatonStefaniniService.incluir(vm.urlPerfil, objetoDados).then(
                 function (perfilRetorno) {

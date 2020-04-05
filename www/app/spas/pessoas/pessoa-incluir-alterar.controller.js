@@ -28,7 +28,7 @@ function PessoaIncluirAlterarController(
         dataNascimento: null,
         enderecos: [],
         perfils: [],
-        situacao: false
+        situacao: false,
     };
     vm.enderecoDefault = {
         id: null,
@@ -46,33 +46,22 @@ function PessoaIncluirAlterarController(
     vm.urlPessoa = "http://localhost:8080/treinamento/api/pessoas/";
     vm.urlObterEnderecoPorCep = "http://localhost:8080/treinamento/api/cep/"
 
-    vm.obterEnderecoPorCep = function () {
-        HackatonStefaniniService.listar(vm.urlObterEnderecoPorCep + vm.enderecoDefault.cep).then(
-            function (response) {
-
-                vm.enderecoDefault.uf = response.data.uf;
-                vm.enderecoDefault.localidade = response.data.localidade;
-                vm.enderecoDefault.bairro = response.data.bairro;
-                vm.enderecoDefault.logradouro = response.data.logradouro;
-            }
-        )
-    }
-
     /**METODOS DE INICIALIZACAO */
     vm.init = function () {
         vm.tituloTela = "Cadastrar Pessoa";
         vm.acao = "Cadastrar";
-        vm.idPessoa = $routeParams.idPessoa;
+
 
         /**Recuperar a lista de perfil */
+        vm.idPessoa = $routeParams.idPessoa;
         vm.listar(vm.urlPerfil).then(
             function (response) {
                 if (response !== undefined) {
                     vm.listaPerfil = response;
-                    if (idPessoa) {
+                    if (vm.idPessoa) {
                         vm.tituloTela = "Editar Pessoa";
                         vm.acao = "Editar";
-                        vm.recuperarObjetoPorIDURL(idPessoa, vm.urlPessoa).then(
+                        vm.recuperarObjetoPorIDURL(vm.idPessoa, vm.urlPessoa).then(
                             function (pessoaRetorno) {
                                 if (pessoaRetorno !== undefined) {
                                     vm.pessoa = pessoaRetorno;
@@ -97,7 +86,6 @@ function PessoaIncluirAlterarController(
     };
 
     vm.abrirModal = function (endereco) {
-        vm.tituloTela = "Cadastrar Endereço";
         vm.enderecoModal = vm.enderecoDefault;
         if (endereco !== undefined)
             vm.enderecoModal = endereco;
@@ -259,52 +247,69 @@ function PessoaIncluirAlterarController(
         }
     }
 
-    /**METODOS AUXILIARES */
-    vm.formataDataJava = function (data) {
-        var dia = data.slice(0, 2);
-        var mes = data.slice(2, 4);//3, 5
-        var ano = data.slice(4, 8);//4, 8
+    //Método cep
+    vm.obterEnderecoPorCep = function () {
+        if (vm.enderecoModal.cep.length === 8) {
+            HackatonStefaniniService.listar(vm.urlObterEnderecoPorCep + vm.enderecoDefault.cep).then(
+                function (response) {
+                    if (response.data.erro === undefined) {
+                        vm.enderecoDefault.uf = response.data.uf;
+                        vm.enderecoDefault.localidade = response.data.localidade;
+                        vm.enderecoDefault.bairro = response.data.bairro;
+                        vm.enderecoDefault.logradouro = response.data.logradouro;
+                    } else {
+                        alert("CEP INVÁLIDO");
+                    }
+                }
+            );
+        }
 
-        return ano + "-" + mes + "-" + dia;
-    };
+        /**METODOS AUXILIARES */
+        vm.formataDataJava = function (data) {
+            var dia = data.slice(0, 2);
+            var mes = data.slice(2, 4);//3, 5
+            var ano = data.slice(4, 8);//4, 8
 
-    vm.formataDataTela = function (data) {
-        var ano = data.slice(0, 4);
-        var mes = data.slice(5, 7);
-        var dia = data.slice(8, 10);
+            return ano + "-" + mes + "-" + dia;
+        };
 
-        return dia + mes + ano;
-    };
+        vm.formataDataTela = function (data) {
+            var ano = data.slice(0, 4);
+            var mes = data.slice(5, 7);
+            var dia = data.slice(8, 10);
+
+            return dia + mes + ano;
+        };
 
 
-    vm.listaUF = [
-        { "id": "RO", "desc": "RO" },
-        { "id": "AC", "desc": "AC" },
-        { "id": "AM", "desc": "AM" },
-        { "id": "RR", "desc": "RR" },
-        { "id": "PA", "desc": "PA" },
-        { "id": "AP", "desc": "AP" },
-        { "id": "TO", "desc": "TO" },
-        { "id": "MA", "desc": "MA" },
-        { "id": "PI", "desc": "PI" },
-        { "id": "CE", "desc": "CE" },
-        { "id": "RN", "desc": "RN" },
-        { "id": "PB", "desc": "PB" },
-        { "id": "PE", "desc": "PE" },
-        { "id": "AL", "desc": "AL" },
-        { "id": "SE", "desc": "SE" },
-        { "id": "BA", "desc": "BA" },
-        { "id": "MG", "desc": "MG" },
-        { "id": "ES", "desc": "ES" },
-        { "id": "RJ", "desc": "RJ" },
-        { "id": "SP", "desc": "SP" },
-        { "id": "PR", "desc": "PR" },
-        { "id": "SC", "desc": "SC" },
-        { "id": "RS", "desc": "RS" },
-        { "id": "MS", "desc": "MS" },
-        { "id": "MT", "desc": "MT" },
-        { "id": "GO", "desc": "GO" },
-        { "id": "DF", "desc": "DF" }
-    ];
+        vm.listaUF = [
+            { "id": "RO", "desc": "RO" },
+            { "id": "AC", "desc": "AC" },
+            { "id": "AM", "desc": "AM" },
+            { "id": "RR", "desc": "RR" },
+            { "id": "PA", "desc": "PA" },
+            { "id": "AP", "desc": "AP" },
+            { "id": "TO", "desc": "TO" },
+            { "id": "MA", "desc": "MA" },
+            { "id": "PI", "desc": "PI" },
+            { "id": "CE", "desc": "CE" },
+            { "id": "RN", "desc": "RN" },
+            { "id": "PB", "desc": "PB" },
+            { "id": "PE", "desc": "PE" },
+            { "id": "AL", "desc": "AL" },
+            { "id": "SE", "desc": "SE" },
+            { "id": "BA", "desc": "BA" },
+            { "id": "MG", "desc": "MG" },
+            { "id": "ES", "desc": "ES" },
+            { "id": "RJ", "desc": "RJ" },
+            { "id": "SP", "desc": "SP" },
+            { "id": "PR", "desc": "PR" },
+            { "id": "SC", "desc": "SC" },
+            { "id": "RS", "desc": "RS" },
+            { "id": "MS", "desc": "MS" },
+            { "id": "MT", "desc": "MT" },
+            { "id": "GO", "desc": "GO" },
+            { "id": "DF", "desc": "DF" }
+        ];
 
-}
+    }}

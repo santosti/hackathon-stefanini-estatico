@@ -12,21 +12,17 @@ function PessoaListarController($rootScope, $scope, $location,
 
     vm.url = "http://localhost:8080/treinamento/api/pessoas/";
     vm.urlEndereco = "http://localhost:8080/treinamento/api/enderecos/";
-   // vm.urlCEP = "https://viacep.com.br/ws/7220000/json/";
+    vm.urlPaginado = "http://localhost:8080/treinamento/api/pessoas/paginado";
 
+    // vm.numPag = 1;
+    // vm.tamanhoPag = 5;
 
     vm.init = function () {
-      /*  HackatonStefaniniService.buscarCEP(vm.urlCEP).then( //exemplo cep
-            function(responseCEP){
-                console.log(responseCEP);
-            }
-        )*/
         HackatonStefaniniService.listar(vm.url).then(
             function (responsePessoas) {
-                console.log(responsePessoas);
-                if (responsePessoas.data !== undefined)
+                if (responsePessoas.data !== undefined) {
                     vm.listaPessoas = responsePessoas.data;
-
+                }
                 vm.listaPessoasMostrar = [];
                 var max = vm.listaPessoas.length > vm.qdePorPagina ? vm.qdePorPagina : vm.listaPessoas.length;
 
@@ -137,3 +133,4 @@ function PessoaListarController($rootScope, $scope, $location,
     }
 
 }
+// vm.urlPaginado + `?pageNumber=${vm.numPag}&pageSize=${vm.tamanhoPag}`

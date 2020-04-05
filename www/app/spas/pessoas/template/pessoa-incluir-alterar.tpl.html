@@ -20,13 +20,10 @@
         <h5 class="modal-title">{{vm.tituloTela}}</h5>
       </div>
       <div class="form-group">
-        <img alt="imagem" id="imagemPessoa" src="{{vm.pessoa.imagem}}" style="width:118px; height:140px;">
+        <img alt="Foto" id="imagemPessoa" src="{{vm.pessoa.imagem}}" style="width:118px; height:140px;"
+          ng-model="vm.pessoa.imagem">
         <input type="file" id="file" onchange="vm.visualizarImg()">
       </div>
-      <!-- <div class="form-group">
-        <img alt="imagem" id="imagemPessoa" src="" style="width:118px; height:140px;" ng-model="vm.pessoa.imagem">
-        <input type="file" id="file" onchange="vm.visualizarImg()"">
-      </div> -->
       <div class="form-group">
         <label for="nomePessoa">Nome</label>
         <input type="nome" class="form-control" id="nomePessoa" ng-model="vm.pessoa.nome"
