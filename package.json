@@ -43,7 +43,7 @@
         "angular-sanitize": "^1.7.9",
         "angular-ui-router": "^1.0.25",
         "chrome-launcher": "^0.10.5",
-        "jquery": "^3.4.1",
+        "jquery": "^3.5.0",
         "karma": "^1.7.1",
         "ng-table": "^3.0.1",
         "sanitize": "^2.1.0"
